@@ -4,26 +4,36 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] float MoveSpeed = 10f;
+
     private void Update()
     {
+        Vector2 inputVector = new Vector2(0, 0);
+
         if (Input.GetKey(KeyCode.W))
         {
-            Debug.Log("Forward!");
+            inputVector.y = 1;
         }
         
         if (Input.GetKey(KeyCode.S))
         {
-            Debug.Log("Back!!");
+            inputVector.y = -1;
         }
 
         if(Input.GetKey(KeyCode.D))
         {
-            Debug.Log("Right!");
+            inputVector.x = 1;
         }
 
         if( Input.GetKey(KeyCode.A)) 
         {
-            Debug.Log("Left!");
+            inputVector.x = -1;
         }
+
+        inputVector = inputVector.normalized;
+
+        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+        transform.position += moveDir * MoveSpeed * Time.deltaTime;
+
     }
 }
