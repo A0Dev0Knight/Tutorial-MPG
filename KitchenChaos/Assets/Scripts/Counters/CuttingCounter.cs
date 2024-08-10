@@ -4,14 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.iOS;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter, IHasProgress
 {
-    public event EventHandler<OnCuttingKitchenObjectEventArgs> OnCuttingKitchenObject;
-    public class OnCuttingKitchenObjectEventArgs : EventArgs
-    {
-        public float ProgressNormalised;
-    }
-
+    public static event EventHandler OnAnyCut;
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler OnCut;
 
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
@@ -29,6 +25,13 @@ public class CuttingCounter : BaseCounter
                 {
                     player.GetKitchenObject().SetKitchenObjectParent(this);
                     cuttingProgress = 0;
+
+                    CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
+                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+                    {
+                        ProgressNormalised = (float)cuttingProgress / cuttingRecipeSO.CuttingProgressMax
+                    });
+
                 }
             }
             else
@@ -49,6 +52,16 @@ public class CuttingCounter : BaseCounter
             {
                 // player does already have an object in his hands
                 Debug.LogError("You already have an object in your hands");
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitckenObject plateKitckenObject))
+                {
+                    // player holds a plate
+
+                    if (plateKitckenObject.TryAddIngredientToPlate(this.GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
+
             }
 
 
@@ -62,10 +75,11 @@ public class CuttingCounter : BaseCounter
         {
             cuttingProgress++;
             OnCut?.Invoke(this, EventArgs.Empty);
+            OnAnyCut?.Invoke(this, EventArgs.Empty);
 
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
 
-            OnCuttingKitchenObject?.Invoke(this,new OnCuttingKitchenObjectEventArgs
+            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
             {
                 ProgressNormalised = (float)cuttingProgress/ cuttingRecipeSO.CuttingProgressMax
             });
@@ -77,6 +91,12 @@ public class CuttingCounter : BaseCounter
                 GetKitchenObject().DestroySelf();
 
                 KitchenObject.SpawnKitchenObject(kitchenObjectSO, this);
+
+                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+                {
+                    ProgressNormalised = 0f,
+                });
+
             }
         }
         else

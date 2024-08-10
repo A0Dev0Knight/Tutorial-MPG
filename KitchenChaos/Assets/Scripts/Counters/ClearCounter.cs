@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ClearCounter : BaseCounter
@@ -34,6 +35,28 @@ public class ClearCounter : BaseCounter
             {
                 // player does already have an object in his hands
                 Debug.LogError("You already have an object in your hands");
+
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitckenObject plateKitckenObject))
+                {
+                    // player holds a plate
+
+                    if (plateKitckenObject.TryAddIngredientToPlate(this.GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
+                else
+                {
+                    if (GetKitchenObject().TryGetPlate(out plateKitckenObject))
+                    {
+                        // counter holds a plate
+                        if (plateKitckenObject.TryAddIngredientToPlate(player.GetKitchenObject().GetKitchenObjectSO()))
+                        {
+                            player.GetKitchenObject().DestroySelf();
+                        }
+                    }
+
+                }
             }
 
 

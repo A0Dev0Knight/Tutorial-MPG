@@ -3,14 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrashCounter : BaseCounter
+public class TrashCounter : BaseCounter, IHasProgress
 {
-    public event EventHandler<OnTrashCounterAccessedEventArgs> OnTrashCounterAccessed;
-
-    public class OnTrashCounterAccessedEventArgs : EventArgs
-    {
-        public float nrOfItemsInTrashCounterNormalised;
-    }
+    public static event EventHandler OnAnyObjectTrashed;
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
     [SerializeField] private int maxTrashedItems = 10;
 
@@ -20,10 +16,12 @@ public class TrashCounter : BaseCounter
         if (player.HasKitchenObject() && totalTrashedItems < maxTrashedItems)
         {
             player.GetKitchenObject().DestroySelf();
+            OnAnyObjectTrashed?.Invoke(this, EventArgs.Empty);
+
             totalTrashedItems++;
-            OnTrashCounterAccessed?.Invoke(this, new OnTrashCounterAccessedEventArgs
+            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
             {
-                nrOfItemsInTrashCounterNormalised = (float)totalTrashedItems / maxTrashedItems,
+                ProgressNormalised = (float)totalTrashedItems / maxTrashedItems,
             });
         }
     }
@@ -31,10 +29,11 @@ public class TrashCounter : BaseCounter
     public override void InteractAlternate(Player player)
     {
         totalTrashedItems = 0;
-        OnTrashCounterAccessed?.Invoke(this, new OnTrashCounterAccessedEventArgs
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
         {
-            nrOfItemsInTrashCounterNormalised = (float)totalTrashedItems / maxTrashedItems,
+            ProgressNormalised = (float)totalTrashedItems / maxTrashedItems,
         });
 
+        OnAnyObjectTrashed?.Invoke(this, EventArgs.Empty);
     }
 }
