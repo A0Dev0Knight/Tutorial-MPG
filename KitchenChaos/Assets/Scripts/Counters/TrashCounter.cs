@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class TrashCounter : BaseCounter, IHasProgress
 {
+    new public static void ResetStaticData()
+    {
+        OnAnyObjectTrashed = null;
+    }
+
     public static event EventHandler OnAnyObjectTrashed;
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
