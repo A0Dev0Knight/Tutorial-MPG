@@ -14,6 +14,23 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI musicBtnText;
     [SerializeField] private Button backButton;
 
+    [SerializeField] private TextMeshProUGUI moveUpText;
+    [SerializeField] private TextMeshProUGUI moveDownText;
+    [SerializeField] private TextMeshProUGUI moveLeftText;
+    [SerializeField] private TextMeshProUGUI moveRightText;
+    [SerializeField] private TextMeshProUGUI interactText;
+    [SerializeField] private TextMeshProUGUI interactAlternateText;
+    [SerializeField] private TextMeshProUGUI pauseText;
+
+    [SerializeField] private Button moveUpBtn;
+    [SerializeField] private Button moveDownBtn;
+    [SerializeField] private Button moveLeftBtn;
+    [SerializeField] private Button moveRightBtn;
+    [SerializeField] private Button interactBtn;
+    [SerializeField] private Button interactAlternateBtn;
+    [SerializeField] private Button pauseBtn;  
+
+
 
     private void Awake()
     {
@@ -52,6 +69,14 @@ public class OptionsUI : MonoBehaviour
     {
         soundEffectsBtnText.text = "Sound effects: " + Mathf.Round(SoundManager.Instance.GetVolume() * 10f).ToString();
         musicBtnText.text = "Music: " + Mathf.Round(MusicManager.Instance.GetVolume() * 10).ToString();
+
+        moveUpText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Move_Up);
+        moveDownText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Move_Down);
+        moveLeftText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Move_Left);
+        moveRightText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Move_Right);
+        interactText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Interact);
+        interactAlternateText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Interact_Alternate);
+        pauseText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Pause);
     }
 
     public void Show()
