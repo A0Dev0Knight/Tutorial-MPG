@@ -119,15 +119,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         float playerDistance = MoveSpeed * Time.deltaTime;
         float playerHeight = 2f;
         float playerWidth = .5f;
-
+        float diagonalMovementDeadzone = .2f;
         bool canWalk = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerWidth, moveDir, playerDistance);
 
         if (!canWalk)
         {
             // Test if player can move on the OX axis
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0);
-            moveDirX = moveDirX.normalized;
-            bool canWalkX = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerWidth, moveDirX, playerDistance);
+            bool canWalkX = (moveDirX.x < -diagonalMovementDeadzone || moveDirX.x > +diagonalMovementDeadzone) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerWidth, moveDirX, playerDistance);
 
             if (canWalkX)
             {
@@ -139,7 +138,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
                 // Player can move only on OZ axis now
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z);
                 moveDirZ = moveDirZ.normalized;
-                bool canWalkZ = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerWidth, moveDirZ, playerDistance);
+                bool canWalkZ = (moveDirZ.z < -diagonalMovementDeadzone || moveDirZ.z > +diagonalMovementDeadzone) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerWidth, moveDirZ, playerDistance);
 
                 if (canWalkZ)
                 {
