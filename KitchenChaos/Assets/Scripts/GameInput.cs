@@ -12,6 +12,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnInteractAction;
     public event EventHandler OnInteractAlternateAction;
     public event EventHandler OnPauseAction;
+    public event EventHandler OnRespawnAction;
     public event EventHandler OnBindingRebind;
 
     private PlayerInputActions playerInputAction;
@@ -44,11 +45,17 @@ public class GameInput : MonoBehaviour
         playerInputAction.Player.InteractAlternate.performed += InteractAlternate_performed;
 
         playerInputAction.Player.Pause.performed += Pause_performed;
+        playerInputAction.Player.Respawn.performed += Respawn_performed;
 
         if (PlayerPrefs.HasKey(PLAYER_PREFS_KEY_BINDINGS))
         {
             playerInputAction.LoadBindingOverridesFromJson(PlayerPrefs.GetString(PLAYER_PREFS_KEY_BINDINGS));
         }
+    }
+
+    private void Respawn_performed(InputAction.CallbackContext obj)
+    {
+        OnRespawnAction?.Invoke(this,EventArgs.Empty);
     }
 
     private void OnDestroy()

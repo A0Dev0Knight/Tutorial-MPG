@@ -45,6 +45,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         GameInput.OnInteractAction += GameInput_OnInteractAction;
         GameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+        GameInput.OnRespawnAction += GameInput_OnRespawnAction;
+    }
+
+    private void GameInput_OnRespawnAction(object sender, EventArgs e)
+    {
+        transform.position = Vector3.zero;
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
