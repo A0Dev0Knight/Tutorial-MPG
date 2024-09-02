@@ -22,6 +22,7 @@ public class DeliveryManager : MonoBehaviour
     private int waitingRecipesMax = 5;
 
     private int successfulRecipesAmount;
+    private int failedRecipesAmount;
 
     private void Awake()
     {
@@ -83,6 +84,7 @@ public class DeliveryManager : MonoBehaviour
         }
 
         Debug.Log("Plate cannot be delivered!");
+        failedRecipesAmount++;
         OnRecipeFailed?.Invoke(this, EventArgs.Empty);
     }
 
@@ -94,5 +96,10 @@ public class DeliveryManager : MonoBehaviour
     public int GetSuccessfulRecipesAmount()
     {
         return successfulRecipesAmount;
+    }
+
+    public int GetFailedRecipesAmount()
+    {
+        return failedRecipesAmount;
     }
 }

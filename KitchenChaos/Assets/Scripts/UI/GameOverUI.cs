@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI recipesDeliveredText;
+    [SerializeField] private TextMeshProUGUI recipesFailedText;
 
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private Button retryButton;
@@ -32,7 +33,7 @@ public class GameOverUI : MonoBehaviour
         {
             Show();
             recipesDeliveredText.text = DeliveryManager.Instance.GetSuccessfulRecipesAmount().ToString();
-
+            recipesFailedText.text = DeliveryManager.Instance.GetFailedRecipesAmount().ToString();
         }
         else
         {
