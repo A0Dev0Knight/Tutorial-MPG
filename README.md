@@ -33,3 +33,14 @@ The hardest part of this journey was the end. I had been following the course fo
 In other words, it was a good learning resource. I haven't learned everything to the letter, but I will come back to it when I get stuck—that is to be expected, after all.
 
 We shall meet again and see if I manage to make a name for myself after all.
+
+
+## What i have added:
+
+1. `Trash counter` has a `fill amount` - press `F` key to empty it.
+
+2. `Respawn` Function: Sometimes, the player may phase through objects. Press the `R` key to respawn at position `(0, 0, 0)`.
+
+3. `Retry` / `Main` menu `buttons` when game is over
+
+4. `Number` of `successful` / `failed recipes` on game over screen.
