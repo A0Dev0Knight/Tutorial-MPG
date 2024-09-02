@@ -2,13 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI recipesDeliveredText;
 
+    [SerializeField] private Button mainMenuButton;
+    [SerializeField] private Button retryButton;
+
     private void Awake()
     {
+        mainMenuButton.onClick.AddListener(() => {
+            Loader.Load(Loader.Scene.MainMenuScene);
+        });
+        retryButton.onClick.AddListener(() => {
+            Loader.Load(Loader.Scene.GameScene);
+        });
         Hide();
     }
     private void Start()
@@ -32,10 +42,13 @@ public class GameOverUI : MonoBehaviour
 
     private void Show()
     {
+
         foreach (Transform child in transform)
         {
             child.gameObject.SetActive(true);
         }
+        mainMenuButton.Select();
+
     }
 
     private void Hide()
